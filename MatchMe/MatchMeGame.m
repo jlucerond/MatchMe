@@ -61,7 +61,6 @@
                                                          NSUInteger indexSuit,
                                                          BOOL *stopSuit) {
             [self.deck addCard:[[PlayingCard alloc] initWithRank:rank suit:suit color:self.colorForSuit[suit]]];
-            NSLog(@"%@ %@", rank, suit);
         }];
     }];
 }

@@ -16,6 +16,22 @@
 
 @implementation PlayingCardCell
 
+- (void) awakeFromNib {
+    [self addObserver: self
+           forKeyPath: @"selected"
+              options: NSKeyValueObservingOptionNew
+              context: NULL];
+}
+
+- (void) observeValueForKeyPath:(NSString *)keyPath
+                       ofObject:(id)object
+                         change:(NSDictionary *)change
+                        context:(void *)context {
+    if ([object isEqual:self] && [keyPath isEqualToString:@"selected"] && [change[@"new"] isEqualToNumber:@1]){
+        [self didReceiveTap];
+    }
+}
+
 - (void) refreshView {
     self.layer.cornerRadius = self.frame.size.width/16;
     [self customizeLabel];
@@ -32,7 +48,10 @@
 }
 
 - (UIColor *) accentColor {
-    return [UIColor colorWithRed:204.0/255 green:204.0/255 blue:50.0/255 alpha:1.0];
+    return [UIColor colorWithRed:204.0/255
+                           green:204.0/255
+                            blue:50.0/255
+                           alpha:1.0];
 }
 
 - (void) drawRect:(CGRect)rect {

@@ -7,7 +7,6 @@
 //
 
 #import "GameBoardViewController.h"
-#import "PlayingCardCell.h"
 #import "MatchMeGame.h"
 #import "PlayingCardController.h"
 
@@ -23,7 +22,7 @@
 static NSString * const reuseIdentifier = @"Cell";
 
 - (NSInteger) numberOfPairs {
-    return 10;
+    return 5;
 }
 
 - (NSInteger) numberOfCards {
@@ -33,6 +32,7 @@ static NSString * const reuseIdentifier = @"Cell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setUpGame];
+    [self dealCards];
 }
 
 - (void) setUpGame {
@@ -40,15 +40,12 @@ static NSString * const reuseIdentifier = @"Cell";
     [self.game fillAndShuffle];
 }
 
-- (NSArray *) playingCardControllers {
-    if (! _playingCardControllers){
-        NSMutableArray *tempControllers = [[NSMutableArray alloc] initWithCapacity:[self numberOfCards]];
-        for (int i = 0; i < [self numberOfCards]; i++){
-            [tempControllers addObject:[[PlayingCardController alloc] initWithPlayingCard:[self.game nextCard]]];
-        }
-        _playingCardControllers = tempControllers;
+- (void) dealCards {
+    NSMutableArray *tempControllers = [[NSMutableArray alloc] initWithCapacity:[self numberOfCards]];
+    for (int i = 0; i < [self numberOfCards]; i++) {
+        [tempControllers addObject:[[PlayingCardController alloc] initWithPlayingCard:[self.game nextCard]]];
     }
-    return _playingCardControllers;
+    self.playingCardControllers = tempControllers;
 }
 
 #pragma mark <UICollectionViewDataSource>
@@ -63,17 +60,17 @@ static NSString * const reuseIdentifier = @"Cell";
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    PlayingCardCell *playingCardCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PlayingCardCell" forIndexPath:indexPath];
-    playingCardCell.dataSource = self.playingCardControllers[indexPath.item];
-    [playingCardCell refreshView];
+    UICollectionViewCell *playingCardCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PlayingCardCell" forIndexPath:indexPath];
+    PlayingCardController *controllerForCell = self.playingCardControllers[indexPath.item];
+    [controllerForCell connectToCell:playingCardCell];
     return playingCardCell;
 }
 
 #pragma mark <UICollectionViewDelegate>
 
 - (void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    PlayingCardCell *selectedCell = (PlayingCardCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    [selectedCell didReceiveTap];
+    PlayingCardController *selectedController = self.playingCardControllers[indexPath.item];
+    [selectedController didTapCell];
 }
 
 /*

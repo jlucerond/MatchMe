@@ -150,10 +150,10 @@
 		D8F526D71B384CF2006921DF /* Playing Card Cell */ = {
 			isa = PBXGroup;
 			children = (
-				D8F526D01B384C70006921DF /* PlayingCardCell.h */,
-				D8F526D11B384C70006921DF /* PlayingCardCell.m */,
 				D8F526E31B38A562006921DF /* PlayingCardController.h */,
 				D8F526E41B38A562006921DF /* PlayingCardController.m */,
+				D8F526D01B384C70006921DF /* PlayingCardCell.h */,
+				D8F526D11B384C70006921DF /* PlayingCardCell.m */,
 			);
 			name = "Playing Card Cell";
 			sourceTree = "<group>";

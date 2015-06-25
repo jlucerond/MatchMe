@@ -7,11 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @class PlayingCard;
 
 @interface PlayingCardController : NSObject
 
 - (instancetype) initWithPlayingCard: (PlayingCard *) playingCard;
+- (void) connectToCell: (UICollectionViewCell *) cell;
+- (void) didTapCell;
 
 @end

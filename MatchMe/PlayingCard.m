@@ -8,6 +8,11 @@
 
 #import "PlayingCard.h"
 
+//redeclare our isFaceUp property to be readwrite so we can change it in our implementation file
+@interface PlayingCard ()
+@property (nonatomic, readwrite) BOOL isFaceUp;
+@end
+
 @implementation PlayingCard
 
 - (instancetype) init {
@@ -24,6 +29,17 @@
         _cardColor = color;
     }
     return self;
+}
+
+- (void) showCardFace {
+    self.isFaceUp = TRUE;
+    NSLog(@"this card is face up");
+}
+
+- (void) hideCardFace {
+    self.isFaceUp = NO;
+    NSLog(@"this card is face down");
+
 }
 
 @end

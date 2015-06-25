@@ -11,6 +11,7 @@
 
 @interface PlayingCard : NSObject
 
+@property (nonatomic, readonly) BOOL isFaceUp;
 @property (readonly, nonatomic) NSString *cardRank;
 @property (readonly, nonatomic) NSString *cardSuit;
 @property (readonly, nonatomic) UIColor *cardColor;
@@ -18,5 +19,8 @@
 - (instancetype)initWithRank: (NSString *) rank
                         suit: (NSString *) suit
                        color: (UIColor *) color;
+
+- (void) showCardFace;
+- (void) hideCardFace;
 
 @end
