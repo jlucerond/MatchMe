@@ -9,12 +9,21 @@
 #import "MatchMeGame.h"
 #import "HitMeGame_Private.h"
 #import "Deck.h"
-#import "PlayingCard.h"
+#import "Constants.h"
+
+typedef enum MatchMePaireMatchState:NSUInteger {
+    NotReadyToMatch,
+    ReadyToMatch,
+    TwoCardsMatch,
+    TwoCardsDoNotMatch
+} MatchMePairMatchState;
 
 // class extension
 @interface MatchMeGame ()
 
 @property (nonatomic) NSInteger pairs;
+@property (nonatomic) NSString *rankToMatch;
+@property (nonatomic) MatchMePairMatchState matchState;
 
 @end
 
@@ -26,12 +35,64 @@
     self = [super init];
     if (self) {
         _pairs = pairs;
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(playingCardDidGetTurnedFaceUp:)
+                                                     name:PlayingCardDidBecomeFaceUpNotification
+                                                   object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(playingCardDidCompleteAnimatingToFaceUp:)
+                                                     name:PlayingCardDidFinishFlippingNotification
+                                                   object:nil];
     }
     return self;
 }
 
 - (instancetype)init {
     return [self initWithPairs:0];
+}
+
+- (void) dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:PlayingCardDidBecomeFaceUpNotification
+                                                  object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:PlayingCardDidFinishFlippingNotification
+                                                  object:nil];
+}
+
+- (void) playingCardDidGetTurnedFaceUp : (NSNotification *) notification {
+    NSString *rank = notification.userInfo[@"rank"];
+    if (!self.rankToMatch) {
+        self.rankToMatch = rank;
+        self.matchState = ReadyToMatch;
+    }
+    else {
+        if ([self.rankToMatch isEqualToString:rank]){
+            self.matchState = TwoCardsMatch;
+        }
+        else {
+            self.matchState = TwoCardsDoNotMatch;
+        }
+        self.rankToMatch = nil;
+    }
+}
+
+//- (void)playingCardDidCompleteAnimatingToFaceUp:(NSNotification *)notification {
+//    if (self.matchState == SCSTwoCardsMatch) {
+//        [[NSNotificationCenter defaultCenter]
+//         postNotificationName:SCSMatchMeGameDidIdentifyMatchingCardsNotification
+
+
+- (void) playingCardDidCompleteAnimatingToFaceUp : (NSNotification *) notification {
+    if (self.matchState == TwoCardsMatch) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:MatchMeGameDidIdentifyMatchingCardsNotification
+                                                            object:self];
+    }
+    else if (self.matchState == TwoCardsDoNotMatch) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:MatchMeGameDidIdentifyNonmatchingCardsNotification
+                                                            object:self];
+    }
+        self.matchState = NotReadyToMatch;
 }
 
 - (NSArray *) ranksForMatchGame {
@@ -60,7 +121,9 @@
         [[self suitsForRank] enumerateObjectsUsingBlock:^(NSString *suit,
                                                          NSUInteger indexSuit,
                                                          BOOL *stopSuit) {
-            [self.deck addCard:[[PlayingCard alloc] initWithRank:rank suit:suit color:self.colorForSuit[suit]]];
+            [self.deck addCardWithRank:rank
+                                  suit:suit
+                                 color:self.colorForSuit[suit]];
         }];
     }];
 }

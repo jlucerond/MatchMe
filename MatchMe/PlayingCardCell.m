@@ -7,6 +7,7 @@
 //
 
 #import "PlayingCardCell.h"
+#import "Constants.h"
 
 @interface PlayingCardCell ()
 
@@ -27,8 +28,9 @@
                        ofObject:(id)object
                          change:(NSDictionary *)change
                         context:(void *)context {
-    if ([object isEqual:self] && [keyPath isEqualToString:@"selected"] && [change[@"new"] isEqualToNumber:@1]){
-        [self didReceiveTap];
+    if ([keyPath isEqualToString:@"isFaceUp"]){
+        NSNumber *isFaceUp = change[@"new"];
+        [self didReceiveTapToDisplayCardFaceUp:[isFaceUp boolValue]];
     }
 }
 
@@ -88,12 +90,12 @@
 
 #pragma mark - didReceiveTap and subordinate methods
 
-- (void) didReceiveTap {
+- (void) didReceiveTapToDisplayCardFaceUp: (BOOL) isFaceUp {
     [UIView animateWithDuration: 0.15
                      animations: [self flipHalfway]
                      completion: ^(BOOL finished) {
-                         [self reverseCard];
-                         [self animateFlipTheRestOfTheWay];
+                         [self displayCardFaceUp:isFaceUp];
+                         [self animateFlipTheRestOfTheWayAndNotify:isFaceUp];
                      }];
 }
 
@@ -104,9 +106,9 @@
     };
 }
 
-- (void) reverseCard {
-    self.playingCardLabel.hidden = !self.playingCardLabel.hidden;
-    self.backgroundView.hidden = !self.backgroundView.hidden;
+- (void) displayCardFaceUp:(BOOL) isFaceUp {
+    self.backgroundView.hidden = isFaceUp;
+    self.playingCardLabel.hidden = !isFaceUp;
 }
 
 - (void(^)(void)) flipTheRestOfTheWay {
@@ -115,8 +117,15 @@
     };
 }
 
-- (void) animateFlipTheRestOfTheWay {
-    [UIView animateWithDuration:0.15 animations:[self flipTheRestOfTheWay]];
+- (void) animateFlipTheRestOfTheWayAndNotify: (BOOL) notify {
+    [UIView animateWithDuration:0.15
+                     animations:[self flipTheRestOfTheWay]
+                     completion:^(BOOL finished) {
+                         if (notify) {
+                             [[NSNotificationCenter defaultCenter] postNotificationName:PlayingCardDidFinishFlippingNotification
+                                                                                 object:self];
+                         };
+                     }];
 }
 
 

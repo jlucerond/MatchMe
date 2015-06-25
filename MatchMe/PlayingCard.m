@@ -7,6 +7,7 @@
 //
 
 #import "PlayingCard.h"
+#import "Constants.h"
 
 //redeclare our isFaceUp property to be readwrite so we can change it in our implementation file
 @interface PlayingCard ()
@@ -33,13 +34,17 @@
 
 - (void) showCardFace {
     self.isFaceUp = TRUE;
-    NSLog(@"this card is face up");
+    NSDictionary *userInfo = @{@"rank":self.cardRank,
+                               @"suit":self.cardSuit,
+                               @"color":self.cardColor,
+                               @"timestamp":[NSDate date]};
+    [[NSNotificationCenter defaultCenter] postNotificationName: PlayingCardDidBecomeFaceUpNotification
+                                                        object:self
+                                                      userInfo:userInfo];
 }
 
 - (void) hideCardFace {
-    self.isFaceUp = NO;
-    NSLog(@"this card is face down");
-
+    self.isFaceUp = FALSE;
 }
 
 @end

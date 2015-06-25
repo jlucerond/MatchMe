@@ -8,7 +8,6 @@
 
 //#import <UIKit/UIKit.h>
 #import "HitMeGame.h"
-#import "PlayingCard.h"
 #import "Deck.h"
 #import "HitMeGame_Private.h"
 
@@ -57,10 +56,7 @@
 - (void) fillDeck {
     for (NSString *rank in self.validRanks){
         for (NSString *suit in self.validSuits){
-            PlayingCard *newCard = [[PlayingCard alloc] initWithRank:rank
-                                                                suit:suit
-                                                               color:self.colorForSuit[suit]];
-            [self.deck addCard:newCard];
+            [self.deck addCardWithRank:rank suit:suit color:self.colorForSuit[suit]];
         }
     }
 }

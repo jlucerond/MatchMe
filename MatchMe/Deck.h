@@ -7,13 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @class PlayingCard;
 
 @interface Deck : NSObject
 
 - (NSUInteger) numberOfCardsInDeck;
-- (void) addCard: (PlayingCard *) card;
+- (void) addCardWithRank: (NSString *) rank
+                    suit: (NSString *) suit
+                   color: (UIColor *) color;
 - (PlayingCard *) showNextCard;
 - (PlayingCard *) dealNextCard;
 - (void) shuffleDeck;

@@ -50,6 +50,10 @@
         self.cell = (PlayingCardCell *) cell;
         self.cell.dataSource = self;
         [self.cell refreshView];
+        [self.playingCard addObserver:self.cell
+                           forKeyPath:@"isFaceUp"
+                              options:NSKeyValueObservingOptionNew
+                              context:NULL];
     }
 }
 
