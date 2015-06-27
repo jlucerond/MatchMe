@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>E7D66C0C-E750-4D82-8FC9-4F6AF01E2824</string>
 	<key>IDESourceControlProjectName</key>
-	<string>project</string>
+	<string>MatchMe</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>36C7BDDBF0B170FC8B681244892D689D72EF7E0F</key>
 		<string>https://github.com/jlucerond/MatchMe.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>MatchMe.xcodeproj/project.xcworkspace</string>
+	<string>MatchMe.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>36C7BDDBF0B170FC8B681244892D689D72EF7E0F</key>
