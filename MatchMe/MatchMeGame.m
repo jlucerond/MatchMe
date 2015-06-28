@@ -11,7 +11,7 @@
 #import "Deck.h"
 #import "Constants.h"
 
-typedef enum MatchMePaireMatchState:NSUInteger {
+typedef enum MatchMePairMatchState:NSUInteger {
     NotReadyToMatch,
     ReadyToMatch,
     TwoCardsMatch,

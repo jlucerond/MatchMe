@@ -26,7 +26,7 @@ static NSString * const reuseIdentifier = @"Cell";
 }
 
 - (NSInteger) numberOfCards {
-    return 2*[self numberOfPairs];
+    return 2 * [self numberOfPairs];
 }
 
 - (void)viewDidLoad {
@@ -53,7 +53,6 @@ static NSString * const reuseIdentifier = @"Cell";
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return 1;
 }
-
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return 2* [self numberOfPairs];
